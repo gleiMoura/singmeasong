@@ -17,21 +17,30 @@ beforeEach(async () => {
 
 describe("Recomendations test - integration", () => {
     it("Add a recomendantion", async () => {
-        const recomendantion = recommendationFactory.createRecommendation();
-        const response = await supertest(app).post("/recommendations").send(recomendantion);
+        const recommendantion = recommendationFactory.createRecommendation();
+        const response = await supertest(app).post("/recommendations").send(recommendantion);
         const status = response.status;
 
         const findRecommendationInDatabse = await prisma.recommendation.findUnique({
             where: {
-                name: recomendantion.name
+                name: recommendantion.name
             }
         });
 
-        expect(recomendantion.name).toBe(findRecommendationInDatabse.name);
-        expect(recomendantion.youtubeLink).toBe(findRecommendationInDatabse.youtubeLink)
+        expect(recommendantion.name).toBe(findRecommendationInDatabse.name);
+        expect(recommendantion.youtubeLink).toBe(findRecommendationInDatabse.youtubeLink)
         expect(status).toEqual(201);
+    });
+    
+    it("don't add a recommendation because invalid data", async () => {
+        const wrongRecommendation = {};
+        const response = await supertest(app).post("/recommendations").send(wrongRecommendation);
+
+        expect(response.status).toBe(422);
     })
-})
+});
+
+
 
 afterAll(async () => {
     await prisma.$executeRaw`
