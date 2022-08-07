@@ -8,7 +8,7 @@ function createRecommendation(): {name: string, youtubeLink: string} {
 };
 
 function createRandomNumber(max: number, min: number) {
-    return Math.random() * (max - min) + min;
+    return Math.floor(Math.random() * (max - min) + min);
 }
 
 const recomendantionFactory = {
